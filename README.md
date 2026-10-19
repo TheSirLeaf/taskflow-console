@@ -8,14 +8,13 @@ Repositório do projeto **TaskFlow**, com dois alvos em andamento:
 ## Pré-requisitos
 
 - [.NET SDK 10.0](https://dotnet.microsoft.com/download) ou superior (`dotnet --version`)
-- (Opcional, para a API) SQL Server acessível via connection string `ConexaoPadrao`
 
 ## Estrutura da solução
 
 | Projeto | Descrição |
 |---|---|
-| `TaskFlow.Console/` | Aplicação console (estrutura inicial — implementação pendente) |
-| `TaskFlow.Tests/` | Projeto de testes unitários com xUnit, referenciando o console |
+| `TaskFlow.Console/` | Aplicação console com menu interativo de gerenciamento de tarefas |
+| `TaskFlow.Tests/` | Testes unitários com xUnit para o `TaskManager` |
 | `TaskFlow.API/` | Web API com EF Core, controllers e migrations |
 
 ## Compilar
@@ -30,7 +29,7 @@ dotnet build TaskFlow.slnx
 dotnet test TaskFlow.slnx
 ```
 
-> Neste momento o projeto de testes contém apenas o teste de exemplo gerado pelo template (`UnitTest1`). Os testes de `TaskManager` previstos na lista de exercícios ainda não foram implementados.
+A suíte cobre as regras de validação do `TaskManager`: adição de tarefas com título válido, rejeição de títulos vazios e busca por Id inexistente.
 
 ## Rodar a aplicação console
 
@@ -38,7 +37,7 @@ dotnet test TaskFlow.slnx
 dotnet run --project TaskFlow.Console
 ```
 
-> O console ainda está na estrutura inicial (`Hello, World!`). O menu interativo previsto na lista de exercícios ainda não foi implementado.
+O menu interativo permite adicionar tarefas, listar as tarefas cadastradas, concluir uma tarefa pelo Id e sair do programa.
 
 ## Rodar a API
 
@@ -95,10 +94,10 @@ Schema (model) de `Tarefa` utilizado nos métodos que exigirem body:
 
 ## Configuração do banco
 
-A connection string fica em `TaskFlow.API/appsettings.Development.json`, na chave `ConexaoPadrao`:
+A API usa Entity Framework Core com SQL Server por padrão, configurado pela connection string `ConexaoPadrao` em `TaskFlow.API/appsettings.Development.json`:
 
 ```
 Data Source=localhost;Initial Catalog=Agenda;Integrated Security=True; TrustServerCertificate=True
 ```
 
-Ajuste-a conforme o seu ambiente antes de rodar a API.
+> **Nota:** a migração para persistência em arquivo JSON (sem depender de SQL Server) está planejada, mas ainda não foi implementada. Ajuste a connection string conforme o seu ambiente antes de rodar a API.
