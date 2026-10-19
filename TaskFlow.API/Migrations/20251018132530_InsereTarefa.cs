@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace TrilhaApiDesafio.Migrations
+namespace TaskFlow.API.Migrations
 {
     public partial class InsereTarefa : Migration
     {

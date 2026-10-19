@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using TrilhaApiDesafio.Context;
+using TaskFlow.API.Context;
 
 #nullable disable
 
-namespace TrilhaApiDesafio.Migrations
+namespace TaskFlow.API.Migrations
 {
     [DbContext(typeof(OrganizadorContext))]
     [Migration("20251018132530_InsereTarefa")]
@@ -24,7 +24,7 @@ namespace TrilhaApiDesafio.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("TrilhaApiDesafio.Models.Tarefa", b =>
+            modelBuilder.Entity("TaskFlow.API.Models.Tarefa", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()

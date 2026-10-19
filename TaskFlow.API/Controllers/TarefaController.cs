@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
-using TrilhaApiDesafio.Context;
-using TrilhaApiDesafio.Models;
+using TaskFlow.API.Context;
+using TaskFlow.API.Models;
 
-namespace TrilhaApiDesafio.Controllers
+namespace TaskFlow.API.Controllers
 {
     [ApiController]
     [Route("[controller]")]
