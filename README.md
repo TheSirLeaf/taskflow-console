@@ -1,34 +1,74 @@
-# DIO - Trilha .NET - API e Entity Framework
-www.dio.me
+# TaskFlow
 
-## Desafio de projeto
-Para este desafio, você precisará usar seus conhecimentos adquiridos no módulo de API e Entity Framework, da trilha .NET da DIO.
+Repositório do projeto **TaskFlow**, com dois alvos em andamento:
+
+- **TaskFlow.Console** — aplicação console de gerenciamento de tarefas (*To-Do List*), conforme a [lista de exercícios](lista_de_exerc_cios_git_semantic_flow_e_net.md).
+- **TaskFlow.API** — Web API (ASP.NET Core + Entity Framework Core) para o mesmo domínio de tarefas.
+
+## Pré-requisitos
+
+- [.NET SDK 10.0](https://dotnet.microsoft.com/download) ou superior (`dotnet --version`)
+- (Opcional, para a API) SQL Server acessível via connection string `ConexaoPadrao`
+
+## Estrutura da solução
+
+| Projeto | Descrição |
+|---|---|
+| `TaskFlow.Console/` | Aplicação console (estrutura inicial — implementação pendente) |
+| `TaskFlow.Tests/` | Projeto de testes unitários com xUnit, referenciando o console |
+| `TaskFlow.API/` | Web API com EF Core, controllers e migrations |
+
+## Compilar
+
+```bash
+dotnet build TaskFlow.slnx
+```
+
+## Executar os testes
+
+```bash
+dotnet test TaskFlow.slnx
+```
+
+> Neste momento o projeto de testes contém apenas o teste de exemplo gerado pelo template (`UnitTest1`). Os testes de `TaskManager` previstos na lista de exercícios ainda não foram implementados.
+
+## Rodar a aplicação console
+
+```bash
+dotnet run --project TaskFlow.Console
+```
+
+> O console ainda está na estrutura inicial (`Hello, World!`). O menu interativo previsto na lista de exercícios ainda não foi implementado.
+
+## Rodar a API
+
+```bash
+dotnet run --project TaskFlow.API
+```
+
+Com o ambiente de desenvolvimento ativo, o Swagger fica disponível em `https://localhost:<porta>/swagger`.
+
+---
+
+# TaskFlow.API — Web API de Tarefas
+
+Desafio de projeto do módulo de **API e Entity Framework** (trilha .NET, [DIO](https://www.dio.me)): um sistema gerenciador de tarefas com CRUD completo.
 
 ## Contexto
-Você precisa construir um sistema gerenciador de tarefas, onde você poderá cadastrar uma lista de tarefas que permitirá organizar melhor a sua rotina.
 
-Essa lista de tarefas precisa ter um CRUD, ou seja, deverá permitir a você obter os registros, criar, salvar e deletar esses registros.
+A aplicação deverá permitir cadastrar, consultar, atualizar e deletar tarefas. A classe principal é `Tarefa`:
 
-A sua aplicação deverá ser do tipo Web API ou MVC, fique a vontade para implementar a solução que achar mais adequado.
+![Diagrama da classe Tarefa](TaskFlow.API/diagrama.png)
 
-A sua classe principal, a classe de tarefa, deve ser a seguinte:
-
-![Diagrama da classe Tarefa](diagrama.png)
-
-Não se esqueça de gerar a sua migration para atualização no banco de dados.
+As migrations do Entity Framework Core já estão versionadas em `TaskFlow.API/Migrations`.
 
 ## Métodos esperados
-É esperado que você crie o seus métodos conforme a seguir:
-
 
 **Swagger**
 
-
-![Métodos Swagger](swagger.png)
-
+![Métodos Swagger](TaskFlow.API/swagger.png)
 
 **Endpoints**
-
 
 | Verbo  | Endpoint                | Parâmetro | Body          |
 |--------|-------------------------|-----------|---------------|
@@ -41,7 +81,7 @@ Não se esqueça de gerar a sua migration para atualização no banco de dados.
 | GET    | /Tarefa/ObterPorStatus  | status    | N/A           |
 | POST   | /Tarefa                 | N/A       | Schema Tarefa |
 
-Esse é o schema (model) de Tarefa, utilizado para passar para os métodos que exigirem
+Schema (model) de `Tarefa` utilizado nos métodos que exigirem body:
 
 ```json
 {
@@ -53,6 +93,12 @@ Esse é o schema (model) de Tarefa, utilizado para passar para os métodos que e
 }
 ```
 
+## Configuração do banco
 
-## Solução
-O código está pela metade, e você deverá dar continuidade obedecendo as regras descritas acima, para que no final, tenhamos um programa funcional. Procure pela palavra comentada "TODO" no código, em seguida, implemente conforme as regras acima.
+A connection string fica em `TaskFlow.API/appsettings.Development.json`, na chave `ConexaoPadrao`:
+
+```
+Data Source=localhost;Initial Catalog=Agenda;Integrated Security=True; TrustServerCertificate=True
+```
+
+Ajuste-a conforme o seu ambiente antes de rodar a API.
