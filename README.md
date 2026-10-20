@@ -3,7 +3,7 @@
 Repositório do projeto **TaskFlow**, com dois alvos em andamento:
 
 - **TaskFlow.Console** — aplicação console de gerenciamento de tarefas (*To-Do List*), conforme a [lista de exercícios](lista_de_exerc_cios_git_semantic_flow_e_net.md).
-- **TaskFlow.API** — Web API (ASP.NET Core + Entity Framework Core) para o mesmo domínio de tarefas.
+- **TaskFlow.API** — Web API (ASP.NET Core) para o mesmo domínio de tarefas, com persistência em arquivo JSON.
 
 ## Pré-requisitos
 
@@ -13,9 +13,9 @@ Repositório do projeto **TaskFlow**, com dois alvos em andamento:
 
 | Projeto | Descrição |
 |---|---|
-| `TaskFlow.Console/` | Aplicação console com menu interativo de gerenciamento de tarefas |
-| `TaskFlow.Tests/` | Testes unitários com xUnit para o `TaskManager` |
-| `TaskFlow.API/` | Web API com EF Core, controllers e migrations |
+| `TaskFlow.Console/` | Aplicação console com menu interativo e persistência em JSON |
+| `TaskFlow.Tests/` | Testes unitários com xUnit para o `TaskManager` e o storage JSON |
+| `TaskFlow.API/` | Web API com controllers e persistência em JSON |
 
 ## Compilar
 
@@ -29,7 +29,7 @@ dotnet build TaskFlow.slnx
 dotnet test TaskFlow.slnx
 ```
 
-A suíte cobre as regras de validação do `TaskManager`: adição de tarefas com título válido, rejeição de títulos vazios e busca por Id inexistente.
+A suíte cobre as regras de validação do `TaskManager` (adição com título válido, rejeição de títulos vazios e busca por Id inexistente) e o round-trip de persistência do storage JSON.
 
 ## Rodar a aplicação console
 
@@ -37,7 +37,7 @@ A suíte cobre as regras de validação do `TaskManager`: adição de tarefas co
 dotnet run --project TaskFlow.Console
 ```
 
-O menu interativo permite adicionar tarefas, listar as tarefas cadastradas, concluir uma tarefa pelo Id e sair do programa.
+O menu interativo permite adicionar tarefas, listar as tarefas cadastradas, concluir uma tarefa pelo Id e sair do programa. As tarefas são salvas em `tarefas.json` e recarregadas na próxima execução.
 
 ## Rodar a API
 
@@ -51,7 +51,7 @@ Com o ambiente de desenvolvimento ativo, o Swagger fica disponível em `https://
 
 # TaskFlow.API — Web API de Tarefas
 
-Desafio de projeto do módulo de **API e Entity Framework** (trilha .NET, [DIO](https://www.dio.me)): um sistema gerenciador de tarefas com CRUD completo.
+Desafio de projeto do módulo de **API** (trilha .NET, [DIO](https://www.dio.me)): um sistema gerenciador de tarefas com CRUD completo.
 
 ## Contexto
 
@@ -59,7 +59,7 @@ A aplicação deverá permitir cadastrar, consultar, atualizar e deletar tarefas
 
 ![Diagrama da classe Tarefa](TaskFlow.API/diagrama.png)
 
-As migrations do Entity Framework Core já estão versionadas em `TaskFlow.API/Migrations`.
+As tarefas são persistidas em um arquivo JSON (`tarefas.json`), configurado pela chave `TaskFlow:DataFile` em `TaskFlow.API/appsettings.Development.json`.
 
 ## Métodos esperados
 
@@ -92,12 +92,16 @@ Schema (model) de `Tarefa` utilizado nos métodos que exigirem body:
 }
 ```
 
-## Configuração do banco
+## Persistência
 
-A API usa Entity Framework Core com SQL Server por padrão, configurado pela connection string `ConexaoPadrao` em `TaskFlow.API/appsettings.Development.json`:
+A API não depende de banco de dados: as tarefas são gravadas em um arquivo JSON. O caminho do arquivo é definido pela chave `TaskFlow:DataFile` em `TaskFlow.API/appsettings.Development.json` (padrão: `tarefas.json`):
 
+```json
+{
+  "TaskFlow": {
+    "DataFile": "tarefas.json"
+  }
+}
 ```
-Data Source=localhost;Initial Catalog=Agenda;Integrated Security=True; TrustServerCertificate=True
-```
 
-> **Nota:** a migração para persistência em arquivo JSON (sem depender de SQL Server) está planejada, mas ainda não foi implementada. Ajuste a connection string conforme o seu ambiente antes de rodar a API.
+O arquivo é criado automaticamente na primeira escrita e não é versionado (está no `.gitignore`).
