@@ -1,6 +1,8 @@
 ﻿using TaskFlow.Console.Services;
+using TaskFlow.Console.Storage;
 
-var manager = new TaskManager();
+var storage = new JsonTaskStorage("tarefas.json");
+var manager = new TaskManager(storage);
 
 Console.WriteLine("=== TaskFlow - Gerenciador de Tarefas ===");
 

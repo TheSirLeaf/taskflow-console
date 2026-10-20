@@ -1,10 +1,18 @@
 using TaskFlow.Console.Domain;
+using TaskFlow.Console.Storage;
 
 namespace TaskFlow.Console.Services;
 
 public class TaskManager
 {
-    private readonly List<TaskItem> _tasks = new();
+    private readonly List<TaskItem> _tasks;
+    private readonly ITaskStorage? _storage;
+
+    public TaskManager(ITaskStorage? storage = null)
+    {
+        _storage = storage;
+        _tasks = storage?.Load().ToList() ?? new List<TaskItem>();
+    }
 
     public IReadOnlyCollection<TaskItem> Tasks => _tasks.AsReadOnly();
 
@@ -12,6 +20,7 @@ public class TaskManager
     {
         var task = new TaskItem(title);
         _tasks.Add(task);
+        Persist();
         return task;
     }
 
@@ -29,6 +38,12 @@ public class TaskManager
         }
 
         task.Complete();
+        Persist();
         return true;
+    }
+
+    private void Persist()
+    {
+        _storage?.Save(_tasks);
     }
 }

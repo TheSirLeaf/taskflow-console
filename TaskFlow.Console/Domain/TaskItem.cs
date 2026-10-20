@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace TaskFlow.Console.Domain;
 
 public class TaskItem
@@ -16,6 +18,14 @@ public class TaskItem
         Id = Guid.NewGuid();
         Title = title.Trim();
         IsCompleted = false;
+    }
+
+    [JsonConstructor]
+    private TaskItem(Guid id, string title, bool isCompleted)
+    {
+        Id = id;
+        Title = title;
+        IsCompleted = isCompleted;
     }
 
     public void Complete()
