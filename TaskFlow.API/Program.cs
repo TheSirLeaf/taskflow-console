@@ -1,12 +1,11 @@
 using System.Text.Json.Serialization;
-using Microsoft.EntityFrameworkCore;
-using TaskFlow.API.Context;
+using TaskFlow.API.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddDbContext<OrganizadorContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("ConexaoPadrao")));
+// Persistência em arquivo JSON (sem dependência de banco de dados).
+var dataFile = builder.Configuration["TaskFlow:DataFile"] ?? "tarefas.json";
+builder.Services.AddSingleton(new TarefaRepository(dataFile));
 
 builder.Services.AddControllers().AddJsonOptions(options =>
     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));

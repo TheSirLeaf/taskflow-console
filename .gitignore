@@ -396,3 +396,6 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+# TaskFlow - arquivos de dados locais (persistência em JSON)
+tarefas.json
